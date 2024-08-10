@@ -1,5 +1,0 @@
-# ninja log v6
-1	15	1723302153677395824	CMakeFiles/twilight2d.dir/src/Engine/RenderEngine/TileMapRenderer.cpp.o	51d98368d9e8b180
-1	873	1723302153677395824	CMakeFiles/twilight2d.dir/src/Engine/Window.cpp.o	1c056c14e11280
-1	1337	1723302153677395824	CMakeFiles/twilight2d.dir/src/main.cpp.o	9a7a9b18ced21d37
-1338	1396	1723302155014395760	twilight2d	cc25f38bad23f754

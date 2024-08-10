@@ -1,3 +1,0 @@
-/home/tdehtyar/Projects/Twilight2D_Engine/build/CMakeFiles/twilight2d.dir
-/home/tdehtyar/Projects/Twilight2D_Engine/build/CMakeFiles/edit_cache.dir
-/home/tdehtyar/Projects/Twilight2D_Engine/build/CMakeFiles/rebuild_cache.dir
