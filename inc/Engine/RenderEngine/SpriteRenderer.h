@@ -1,5 +1,7 @@
 #pragma once
 
+class SpriteRenderer;
+
 #include "Camera.h"
 
 #include "RenderEngine.h"

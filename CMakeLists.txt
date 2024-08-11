@@ -25,6 +25,7 @@ set(SOURCES
     src/Engine/RenderEngine/SpriteRenderer.cpp
     src/Engine/Camera.cpp
     src/Engine/Scene.cpp
+    src/Engine/Sprite.cpp
     )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

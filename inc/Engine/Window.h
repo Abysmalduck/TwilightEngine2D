@@ -26,9 +26,13 @@ private:
 
     std::string win_title = "Twilight2D window";
 
-    std::vector<RenderEngine*> _render_engines = std::vector<RenderEngine*>();
+    //Render Engines
+    RenderEngine* spriteRenderEngine;
+    RenderEngine* tileMapRenderEngine;
 
     Scene* window_scene;
+
+    double last_frametime = 16.6f;
 public:
     Window(GLint width = 800, GLint height = 600, std::string title = "Twilight2D window");
 
@@ -36,7 +40,15 @@ public:
 
     void update();
 
-    void addRenderer(RenderEngine* _render_engine);
+    void setLastFrameTime(double frametime)
+    {
+        last_frametime = frametime;
+    }
+
+    double getFrameTime()
+    {
+        return last_frametime;
+    }
 
     GLint getWindowWidth()
     {
@@ -56,5 +68,15 @@ public:
     Scene* getScene()
     {
         return window_scene;
+    }
+
+    RenderEngine* getSpriteRenderer()
+    {
+        return spriteRenderEngine;
+    }
+
+    RenderEngine* getTileMapRenderer()
+    {
+        return tileMapRenderEngine;
     }
 };

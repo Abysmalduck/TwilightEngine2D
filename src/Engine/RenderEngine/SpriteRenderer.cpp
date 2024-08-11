@@ -36,7 +36,6 @@ void SpriteRenderer::draw()
     const glm::mat4* projection_mat = this->camera.getProjMatrixPtr();
     const glm::mat4* view_mat = this->camera.getModelMatrix();
 
-
     glUniformMatrix4fv(view_mat_uniform, 1, GL_FALSE, glm::value_ptr(*view_mat));
     glUniformMatrix4fv(proj_mat_uniform, 1, GL_FALSE, glm::value_ptr(*projection_mat));
 

@@ -51,6 +51,11 @@ public:
         return 0;
     }
 
+    LuaCpp::LuaContext* getContextPtr()
+    {
+        return &this_context;
+    }
+
     void addLibrary(std::shared_ptr<LuaCpp::Registry::LuaLibrary>& lib)
     {
         this_context.AddLibrary(lib);

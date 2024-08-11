@@ -1,5 +1,7 @@
 print("HELLO GUYS")
 
+time = 0;
+
 test_id = tweng_scene.add_object("test", "sprite")
 test_id2 = tweng_scene.add_object("test", "sprite")
 test_id3 = tweng_scene.add_object("test", "sprite")

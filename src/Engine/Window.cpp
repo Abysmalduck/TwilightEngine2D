@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "SpriteRenderer.h"
+#include "TileMapRenderer.h"
 
 Window::Window(GLint width, GLint height, std::string title)
 {
@@ -12,7 +14,7 @@ Window::Window(GLint width, GLint height, std::string title)
         height = 480;
     }
 
-    win_title = title;
+    win_title = title; 
 }
 
 void Window::create()
@@ -22,7 +24,7 @@ void Window::create()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-    SDL_GL_SetSwapInterval(1);
+    SDL_GL_SetSwapInterval(0);
 
     this_window = SDL_CreateWindow(win_title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, win_width, win_height, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(this_window);
@@ -34,10 +36,16 @@ void Window::create()
 
     if(glewInit() != GLEW_OK)
     {
-        printf("ERROR");
+        logsi("Unable to initialize GLEW", ERR);
+        return;
     }
 
     glEnable(GL_DEPTH_TEST);
+
+    spriteRenderEngine = new SpriteRenderer();
+    spriteRenderEngine->init();
+    tileMapRenderEngine = new TileMapRenderer();
+    tileMapRenderEngine->init();
 }
 
 void Window::update()
@@ -46,18 +54,27 @@ void Window::update()
     glClearColor(0.5f, 0.25f, 0.25f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (std::size_t i = 0; i < _render_engines.size(); i++)
-    {
-        _render_engines[i]->draw();
-    }
+    spriteRenderEngine->draw();
+    tileMapRenderEngine->draw();
 
     SDL_GL_SwapWindow(this_window);
 }
 
-void Window::addRenderer(RenderEngine* _render_engine)
-{
-    _render_engine->attachWindow(this);
+#include <LuaCpp.hpp>
+extern Window* current_window;
 
-    _render_engine->init();
-    _render_engines.push_back(_render_engine);
+// LUA CXX WINDOW LIB
+
+void CXX_window_change_resolution(unsigned int w, unsigned int h)
+{
+    //TODO
+}
+
+extern "C"
+{
+    int C_window_change_resolution(lua_State* L)
+    {
+        //TODO
+        return 0;
+    }
 }
