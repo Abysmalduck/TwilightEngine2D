@@ -1,5 +1,7 @@
 #pragma once
 
+class RenderEngine;
+
 #include <GL/glew.h>
 
 #include <SDL2/SDL.h>

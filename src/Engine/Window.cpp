@@ -53,3 +53,11 @@ void Window::update()
 
     SDL_GL_SwapWindow(this_window);
 }
+
+void Window::addRenderer(RenderEngine* _render_engine)
+{
+    _render_engine->attachWindow(this);
+
+    _render_engine->init();
+    _render_engines.push_back(_render_engine);
+}

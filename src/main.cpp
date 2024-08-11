@@ -5,23 +5,44 @@
 #include <Window.h>
 #include "SpriteRenderer.h"
 #include "ShaderLoader.h"
+#include "LuaEngine.h"
+#include "Scene.h"
+
+#define DEFAULT_LUA_PATH "../lua/"
+
+Window* current_window;
 
 int main (int ArgCount, char **Args)
 {
-    bool isRunning = true;
-    
-    Window win(800, 600);
-    win.create();
+    std::string lua_path = DEFAULT_LUA_PATH;
+
+    if (ArgCount == 2)
+    {
+        lua_path = std::string(Args[1]);
+    }
+
+    LuaEngine luaEngine;
+    if(luaEngine.init(lua_path) != 0)
+    {
+        logsi("Lua engine initialization error. Exiting.", ERR);
+        return -1;
+    }
+
+    current_window = new Window(800, 600);
+    current_window->create();
+    Scene* scene = new Scene();
+    current_window->attachScene(scene);
 
     ShaderLoader::getInstance().loadDefaultShaders();
-
     SpriteRenderer spriteRenderer = SpriteRenderer();
-    Sprite sprite = Sprite();
+    current_window->addRenderer(&spriteRenderer);
 
-    spriteRenderer.addSprite(&sprite);
+    Scene::initRootLibrary();
+    luaEngine.addLibrary(Scene::getSceneLib());
 
-    win.addRenderer(&spriteRenderer);
+    bool isRunning = true;
 
+    luaEngine.callRootStart();
     while (isRunning)
     {
         //Events
@@ -33,7 +54,11 @@ int main (int ArgCount, char **Args)
                 isRunning = false;
             }
         }   
-        win.update();
+
+        luaEngine.callRootUpdate();
+
+        //Window Update
+        current_window->update();
     }   
     return 0;
 }

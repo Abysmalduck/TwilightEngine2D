@@ -11,8 +11,9 @@ class Window;
 #include <vector>
 
 #include "RenderEngine.h"
-
 #include "stdio.h"
+
+#include "Scene.h"
 
 class Window
 {
@@ -26,6 +27,8 @@ private:
     std::string win_title = "Twilight2D window";
 
     std::vector<RenderEngine*> _render_engines = std::vector<RenderEngine*>();
+
+    Scene* window_scene;
 public:
     Window(GLint width = 800, GLint height = 600, std::string title = "Twilight2D window");
 
@@ -33,13 +36,7 @@ public:
 
     void update();
 
-    void addRenderer(RenderEngine* _render_engine)
-    {
-        _render_engine->attachWindow(this);
-
-        _render_engine->init();
-        _render_engines.push_back(_render_engine);
-    }
+    void addRenderer(RenderEngine* _render_engine);
 
     GLint getWindowWidth()
     {
@@ -49,5 +46,15 @@ public:
     GLint getWindowHeight()
     {
         return win_height;
+    }
+
+    void attachScene(Scene* scene)
+    {
+        window_scene = scene;
+    }
+
+    Scene* getScene()
+    {
+        return window_scene;
     }
 };
