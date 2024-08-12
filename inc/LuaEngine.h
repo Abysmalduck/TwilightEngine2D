@@ -38,6 +38,7 @@ public:
             return -1;
         }
         logs("Root update.lua file found.");
+        
         if (!std::filesystem::exists(_start_root_file_path))
         {
             logsi("Root start.lua file not found! Unable to initialize Lua engine.", ERR);

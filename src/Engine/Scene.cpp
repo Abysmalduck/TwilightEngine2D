@@ -44,6 +44,28 @@ int CXX_object_set_position(const unsigned int obj_ID, double x, double y, doubl
     return 0;
 }
 
+int CXX_object_set_scale(const unsigned int obj_ID, double x, double y)
+{
+   Object* obj_to_scale = current_window->getScene()->getSceneObjectByID(obj_ID); 
+   if (obj_to_scale == nullptr)
+    {
+        return -1;
+    }
+    obj_to_scale->setScale(x, y, 1);
+    return 0;   
+}
+
+int CXX_object_set_rotation_euler(const unsigned int obj_ID, double x, double y, double z)
+{
+    Object* obj_to_scale = current_window->getScene()->getSceneObjectByID(obj_ID); 
+    if (obj_to_scale == nullptr)
+    {
+        return -1;
+    }
+    obj_to_scale->setRotationEuler(x, y, z);
+    return 0; 
+}
+
 // LUA C SCENE LIBRARY
 
 extern "C"
@@ -100,12 +122,58 @@ extern "C"
 
         return 0;
     }
+
+    int C_object_set_scale(lua_State* L)
+    {
+        int args_num = lua_gettop(L);
+        if (args_num != 3)
+        {
+            return 0;
+        }
+
+        unsigned int ID = lua_tonumber(L, 1);
+        double _scale_x = lua_tonumber(L, 2);
+        double _scale_y = lua_tonumber(L, 3);
+
+        int result_code = CXX_object_set_scale(ID, _scale_x, _scale_y);
+
+        if (result_code != 0)
+        {
+            logsi("Item with ID: " + std::to_string(ID) + " not found", WARN);
+        }
+
+        return 0;
+    }
+
+    int C_object_set_rotation_euler(lua_State* L)
+    {
+        int args_num = lua_gettop(L);
+        if (args_num != 4)
+        {
+            return 0;
+        }
+        unsigned int ID = lua_tonumber(L, 1);
+        double _rot_x = lua_tonumber(L, 2);
+        double _rot_y = lua_tonumber(L, 3);
+        double _rot_z = lua_tonumber(L, 4);
+
+        int result_code = CXX_object_set_rotation_euler(ID, _rot_x, _rot_y,_rot_z);
+
+        if (result_code != 0)
+        {
+            logsi("Item with ID: " + std::to_string(ID) + " not found", WARN);
+        }
+
+        return 0;
+    }
 }
 
 void Scene::initRootLibrary()
 {
     scene_lua_lib->AddCFunction("add_object", C_scene_add_object);
     scene_lua_lib->AddCFunction("object_set_position", C_object_set_position);
+    scene_lua_lib->AddCFunction("object_set_scale", C_object_set_scale);
+    scene_lua_lib->AddCFunction("object_set_rotation_euler", C_object_set_rotation_euler);
 }
 
 std::shared_ptr<LuaCpp::Registry::LuaLibrary>& Scene::getSceneLib()
