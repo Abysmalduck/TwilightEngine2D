@@ -3,7 +3,63 @@
 #include "Window.h"
 #include <LuaCpp.hpp>
 
-extern Window* current_window;
+void Scene::object_start()
+{
+    for (size_t i = 0; i < known_ids.size(); i++)
+    {
+        Object* obj =  scene_objects.at(known_ids[i]);
+        obj->start();
+    }
+}
+
+void Scene::object_update()
+{
+    for (size_t i = 0; i < known_ids.size(); i++)
+    {
+        Object* obj =  scene_objects.at(known_ids[i]);
+        obj->update();
+    }
+}
+
+Object* Scene::getSceneObjectByID(const unsigned int ID)
+{
+    if(scene_objects.find(ID) != scene_objects.end())
+    {
+        return scene_objects.at(ID);
+    }
+    return nullptr;
+}
+
+void Scene::removeSceneObjectByID(unsigned long int ID)
+{
+    auto known_ids_iter = std::find(known_ids.begin(), known_ids.end(), ID);
+    if(known_ids_iter != known_ids.end())
+    {
+        known_ids.erase(known_ids_iter);
+        delete scene_objects.at(ID);
+        scene_objects.erase(ID);
+    }
+    else
+    {
+        logsi("Unable to find Object with ID: " + std::to_string(ID), ERR);
+        return;
+    }
+}
+
+int Scene::addSceneObject(Object* obj)
+{
+    last_id = last_id + 1;
+    scene_objects[last_id] = obj;
+    known_ids.push_back(last_id);
+
+    obj->attachID(last_id);
+
+    logs("added object to scene! Name: " + obj->getName());
+
+    return last_id;
+}
+
+extern OpenGLWindow* current_window;
 
 std::shared_ptr<LuaCpp::Registry::LuaLibrary> Scene::scene_lua_lib = std::make_shared<LuaCpp::Registry::LuaLibrary>("tweng_scene");
 

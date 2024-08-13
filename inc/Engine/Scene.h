@@ -30,58 +30,15 @@ public:
     virtual void scene_update() { };
     virtual void scene_start() { };
 
-    void object_start()
-    {
-        for (size_t i = 0; i < known_ids.size(); i++)
-        {
-            scene_objects.at(known_ids[i])->start();
-        }
-    }
+    void object_start();
+    void object_update();
 
-    void object_update()
-    {
-        for (size_t i = 0; i < known_ids.size(); i++)
-        {
-            scene_objects.at(known_ids[i])->update();
-        }
-    }
-
-    Object* getSceneObjectByID(const unsigned int ID)
-    {
-        if(scene_objects.find(ID) != scene_objects.end())
-        {
-            return scene_objects.at(ID);
-        }
-        return nullptr;
-    }
+    Object* getSceneObjectByID(const unsigned int ID);
 
     //Add object to Scene. Returns Object ID
-    int addSceneObject(Object* obj)
-    {
-        last_id = last_id + 1;
-        scene_objects[last_id] = obj;
-        known_ids.push_back(last_id);
+    int addSceneObject(Object* obj);
 
-        logs("added object to scene! Name: " + obj->getName());
-
-        return last_id;
-    }
-
-    void removeSceneObjectByID(unsigned long int ID)
-    {
-        auto known_ids_iter = std::find(known_ids.begin(), known_ids.end(), ID);
-        if(known_ids_iter != known_ids.end())
-        {
-            known_ids.erase(known_ids_iter);
-            delete scene_objects.at(ID);
-            scene_objects.erase(ID);
-        }
-        else
-        {
-            logsi("Unable to find Object with ID: " + std::to_string(ID), ERR);
-            return;
-        }
-    }
+    void removeSceneObjectByID(unsigned long int ID);
 
     Window* getAttachedWindow()
     {

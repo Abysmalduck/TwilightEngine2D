@@ -2,7 +2,7 @@
 
 #define SDL_MAIN_HANDLED
 
-#include "Window.h"
+#include "OpenGLWindow.h"
 #include "SpriteRenderer.h"
 #include "ShaderLoader.h"
 #include "LuaEngine.h"
@@ -11,6 +11,8 @@
 #define DEFAULT_LUA_PATH "../game/lua/"
 
 Window* current_window;
+LuaEngine* luaEngine;
+
 double engine_time = 0.0;
 double engine_frame_time = 16.6;
 std::shared_ptr<LuaCpp::Registry::LuaLibrary> tweng_lua_lib = std::make_shared<LuaCpp::Registry::LuaLibrary>("tweng");
@@ -28,25 +30,27 @@ int main (int ArgCount, char **Args)
         lua_path = std::string(Args[1]);
     }
 
-    LuaEngine luaEngine;
-    if(luaEngine.init(lua_path) != 0)
+    luaEngine = new LuaEngine();
+    if(luaEngine->init(lua_path) != 0)
     {
         logsi("Lua engine initialization error. Exiting.", ERR);
         return -1;
     }
 
-    current_window = new Window(800, 600);
+    current_window = new OpenGLWindow(800, 600);
     current_window->create();
     Scene* scene = new Scene(current_window);
     current_window->attachScene(scene);
 
     ShaderLoader::getInstance().loadDefaultShaders();
 
-    initLuaLibraries(&luaEngine);
+    initLuaLibraries(luaEngine);
 
     bool isRunning = true;
 
-    luaEngine.callRootStart();
+    luaEngine->callRootStart();
+
+    current_window->start();
     while (isRunning)
     {
         auto frame_start_point = std::chrono::steady_clock::now();
@@ -60,7 +64,7 @@ int main (int ArgCount, char **Args)
             }
         }   
 
-        luaEngine.callRootUpdate();
+        luaEngine->callRootUpdate();
 
         //Window Update
         current_window->update();
@@ -68,7 +72,7 @@ int main (int ArgCount, char **Args)
         auto frame_stop_point = std::chrono::steady_clock::now();
 
         int64_t duration = std::chrono::duration_cast<std::chrono::microseconds>(frame_stop_point - frame_start_point).count();
-        engine_frame_time = ((double)(duration)) / 1000.0f;
+        engine_frame_time = ((double)(duration)) / 1000000.0f;
         engine_time += engine_frame_time;
     }   
     return 0;

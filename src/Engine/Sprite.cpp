@@ -10,7 +10,16 @@
 
 Sprite::Sprite(const std::string& text_path, const std::string& name, Scene* scene) : Object(name, scene) 
 {
-    SpriteRenderer* eng = (SpriteRenderer*)(scene->getAttachedWindow()->getSpriteRenderer());
+    SpriteRenderer* eng = nullptr;
+    if (scene->getAttachedWindow()->getWindowType() == WINDOW_TYPE_OPENGL)
+    {
+        eng = (SpriteRenderer*)(((OpenGLWindow*)scene->getAttachedWindow())->getSpriteRenderer());
+    }
+    else
+    {
+        logsi("Trying to create sprite in non-opengl window.", ERR);
+    }
+    
 
     texture_path = text_path;
 

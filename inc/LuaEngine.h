@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
-#include <log.h>
 #include <filesystem>
-
 #include <LuaCpp.hpp>
+#include <set>
+
+#include "log.h"
 
 #define LUA_UPDATE_FILE_NAME "update.lua"
 #define LUA_START_FILE_NAME "start.lua"
@@ -16,8 +17,11 @@ private:
     std::filesystem::path _update_root_file_path;
     std::filesystem::path _start_root_file_path;
 
+    std::string _lua_path_str;
 
     LuaCpp::LuaContext this_context;
+
+    std::set<std::string> added_scripts = std::set<std::string>();
 public:
 
     int init(const std::string& lua_path)
@@ -49,12 +53,28 @@ public:
         this_context.CompileFile("root_start", _start_root_file_path.string());
         this_context.CompileFile("root_update", _update_root_file_path.string());
 
+        _lua_path_str = _lua_path.string();
+
         return 0;
     }
 
     LuaCpp::LuaContext* getContextPtr()
     {
         return &this_context;
+    }
+
+    void addScriptToContext(const std::string& script_name, const std::string& script_path)
+    {
+        if (added_scripts.find(script_name) == added_scripts.end())
+        {
+            this_context.CompileFile(script_name, script_path);
+            logs("Added " + script_name + " script to context.");
+            added_scripts.insert(script_name);
+            return;
+        }
+
+        logs("Script " + script_name + " already added to context.");
+        return;
     }
 
     void addLibrary(std::shared_ptr<LuaCpp::Registry::LuaLibrary>& lib)
@@ -64,18 +84,7 @@ public:
 
     int callRootStart()
     { 
-        try 
-        {
-		    this_context.Run("root_start");
-	    }
-	    catch (std::runtime_error& e)
-  	    {
-		    std::cout << e.what() << '\n';
-
-            logsi("Runtime script error! " + std::string(e.what()), ERR);
-            return -1;
-  	    }
-        return 0;
+        return luaCallScript("root_start");
     }
 
     int callRootUpdate()
@@ -97,5 +106,10 @@ public:
             return -1;
   	    }
         return 0;
+    }
+
+    const std::string& getLuaPath()
+    {
+        return _lua_path_str;
     }
 };

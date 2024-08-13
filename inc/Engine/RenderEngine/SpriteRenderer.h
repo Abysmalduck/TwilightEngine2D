@@ -37,16 +37,22 @@ private:
 
     const GLuint indices[6] = 
     {  
-        0, 1, 3,  // First Triangle
-        1, 2, 3   // Second Triangle
+        0, 1, 2,
+        2, 3, 0
+        //0, 1, 3,  // First Triangle
+        //1, 2, 3   // Second Triangle
     };
 
     const GLfloat tex_coords[12] =
     {
-        1.0f,  1.0f,
-        1.0f, -1.0f,
-        -1.0f, -1.0f,
-        -1.0f,  1.0f
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        1.0f, 0.0f
+        /*1.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 0.0f,
+        0.0f, 1.0f*/
     };
 
 public:

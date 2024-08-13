@@ -62,9 +62,7 @@ public:
         model = model * glm::eulerAngleXYZ(rotation.x, rotation.y, rotation.z);
 
         model = glm::scale(model, scale);
-        //model = glm::rotate(model, angle, rotation);
         
-
         return &model;
     }
 };

@@ -22,15 +22,5 @@ public:
     Sprite(const std::string& text_path, const std::string& name, Scene* scene);
 
     GLuint getTexture() { return texture_gl;}
-
-    void update() override
-    {
-        
-    }
-
-    void start() override
-    {
-
-    }
 };
 

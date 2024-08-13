@@ -2,70 +2,38 @@
 
 class Window;
 
-#include <GL/glew.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-
 #include <string>
-#include <vector>
-
-#include "RenderEngine.h"
-#include "stdio.h"
-
 #include "Scene.h"
+
+enum WINDOW_TYPE
+{
+    WINDOW_TYPE_NONE,
+    WINDOW_TYPE_OPENGL
+    //maybe other types
+};
 
 class Window
 {
-private:
-    SDL_Window* this_window;
-    SDL_GLContext* this_context;
-
-    GLint win_width = 800;
-    GLint win_height = 600;
-
+protected:
     std::string win_title = "Twilight2D window";
 
-    //Render Engines
-    RenderEngine* spriteRenderEngine;
-    RenderEngine* tileMapRenderEngine;
+    int win_width = 800;
+    int win_height = 600;
 
     Scene* window_scene;
 
+    WINDOW_TYPE win_type = WINDOW_TYPE_NONE;
 public:
-    Window(GLint width = 800, GLint height = 600, std::string title = "Twilight2D window");
+    virtual void create() = 0;
+    virtual void start() = 0;
+    virtual void update() = 0;
 
-    void create();
+    virtual int getWindowHeight() = 0;
+    virtual int getWindowWidth() = 0;
 
-    void update();
+    virtual void attachScene(Scene* scene) { window_scene = scene; }
 
-    GLint getWindowWidth()
-    {
-        return win_width;
-    }
+    Scene* getScene() { return window_scene; }; 
 
-    GLint getWindowHeight()
-    {
-        return win_height;
-    }
-
-    void attachScene(Scene* scene)
-    {
-        window_scene = scene;
-    }
-
-    Scene* getScene()
-    {
-        return window_scene;
-    }
-
-    RenderEngine* getSpriteRenderer()
-    {
-        return spriteRenderEngine;
-    }
-
-    RenderEngine* getTileMapRenderer()
-    {
-        return tileMapRenderEngine;
-    }
+    WINDOW_TYPE getWindowType() {return win_type;}
 };

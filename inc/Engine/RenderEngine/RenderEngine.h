@@ -7,12 +7,12 @@ class RenderEngine;
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
-#include "Window.h"
+#include "OpenGLWindow.h"
 
 class RenderEngine
 {
 private:
-    const Window* attached_window;
+    const OpenGLWindow* attached_window;
 public:
     virtual void init() = 0;
 
@@ -20,7 +20,7 @@ public:
 
     virtual ~RenderEngine() {}
 
-    void attachWindow(const Window* window)
+    void attachWindow(const OpenGLWindow* window)
     {
         attached_window = window;
     }

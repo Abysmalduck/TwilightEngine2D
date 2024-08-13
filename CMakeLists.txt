@@ -11,7 +11,7 @@ include_directories(
     inc/Engine/
     inc/Engine/RenderEngine/
     inc/Engine/ShaderLoader/
-    inc/Engine/Shaders
+    inc/Engine/Shaderscls
 )
 
 if (UNIX)
@@ -21,12 +21,13 @@ endif (UNIX)
 
 set(SOURCES
     src/main.cpp
-    src/Engine/Window.cpp
+    src/Engine/OpenGLWindow.cpp
     src/Engine/RenderEngine/TileMapRenderer.cpp
     src/Engine/RenderEngine/SpriteRenderer.cpp
     src/Engine/Camera.cpp
     src/Engine/Scene.cpp
     src/Engine/Sprite.cpp
+    src/Engine/Object.cpp
     )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

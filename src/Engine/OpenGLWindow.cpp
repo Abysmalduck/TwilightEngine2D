@@ -1,8 +1,8 @@
-#include "Window.h"
+#include "OpenGLWindow.h"
 #include "SpriteRenderer.h"
 #include "TileMapRenderer.h"
 
-Window::Window(GLint width, GLint height, std::string title)
+OpenGLWindow::OpenGLWindow(GLint width, GLint height, std::string title)
 {
     if (width < 640)
     {
@@ -15,9 +15,11 @@ Window::Window(GLint width, GLint height, std::string title)
     }
 
     win_title = title; 
+
+    win_type = WINDOW_TYPE_OPENGL;
 }
 
-void Window::create()
+void OpenGLWindow::create()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
@@ -45,6 +47,7 @@ void Window::create()
     }
 
     glEnable(GL_DEPTH_TEST);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     spriteRenderEngine = new SpriteRenderer();
     spriteRenderEngine->init();
@@ -54,11 +57,20 @@ void Window::create()
     logs("OpenGL initializied. OpenGL String:" + std::string((const char*)glGetString(GL_VERSION)));
 }
 
-void Window::update()
+void OpenGLWindow::start()
+{
+    window_scene->scene_start();
+    window_scene->object_start(); 
+}
+
+void OpenGLWindow::update()
 {
     glViewport(0, 0, 800, 600);
     glClearColor(0.25f, 0.0f, 0.0f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    window_scene->scene_update();
+    window_scene->object_update();
 
     spriteRenderEngine->draw();
     tileMapRenderEngine->draw();
@@ -67,7 +79,7 @@ void Window::update()
 }
 
 #include <LuaCpp.hpp>
-extern Window* current_window;
+extern OpenGLWindow* current_window;
 
 // LUA CXX WINDOW LIB
 
