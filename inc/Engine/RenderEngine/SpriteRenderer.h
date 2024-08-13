@@ -9,6 +9,8 @@ class SpriteRenderer;
 
 #include <vector>
 
+
+
 class SpriteRenderer : public RenderEngine
 {
 private:
@@ -18,24 +20,34 @@ private:
     GLuint VBO;
     GLuint EBO;
 
+    GLuint TEXBUFF;
+
     GLuint shader_program;
 
     std::vector<Sprite*> sprites = std::vector<Sprite*>();
 
-    const GLfloat VERTS[12] = 
-        {
-            0.5f,  0.5f, 0.0f,  // Top Right
-            0.5f, -0.5f, 0.0f,  // Bottom Right
-            -0.5f, -0.5f, 0.0f,  // Bottom Left
-            -0.5f,  0.5f, 0.0f   // Top Left 
-        };
+    const GLfloat verts[12] = 
+    {
+        1.0f,  1.0f, 0.0f,  // Top Right
+        1.0f, -1.0f, 0.0f,  // Bottom Right
+        -1.0f, -1.0f, 0.0f,  // Bottom Left
+        -1.0f,  1.0f, 0.0f   // Top Left 
+    };
 
 
     const GLuint indices[6] = 
-        {  
-            0, 1, 3,  // First Triangle
-            1, 2, 3   // Second Triangle
-        };
+    {  
+        0, 1, 3,  // First Triangle
+        1, 2, 3   // Second Triangle
+    };
+
+    const GLfloat tex_coords[12] =
+    {
+        1.0f,  1.0f,
+        1.0f, -1.0f,
+        -1.0f, -1.0f,
+        -1.0f,  1.0f
+    };
 
 public:
 

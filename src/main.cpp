@@ -1,12 +1,14 @@
 #include <chrono>
 
+#define SDL_MAIN_HANDLED
+
 #include "Window.h"
 #include "SpriteRenderer.h"
 #include "ShaderLoader.h"
 #include "LuaEngine.h"
 #include "Scene.h"
 
-#define DEFAULT_LUA_PATH "../lua/"
+#define DEFAULT_LUA_PATH "../game/lua/"
 
 Window* current_window;
 double engine_time = 0.0;
@@ -17,6 +19,8 @@ void initLuaLibraries(LuaEngine* eng);
 
 int main (int ArgCount, char **Args)
 {
+    LogManager::getInstance().init();
+
     std::string lua_path = DEFAULT_LUA_PATH;
 
     if (ArgCount == 2)

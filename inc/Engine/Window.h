@@ -32,23 +32,12 @@ private:
 
     Scene* window_scene;
 
-    double last_frametime = 16.6f;
 public:
     Window(GLint width = 800, GLint height = 600, std::string title = "Twilight2D window");
 
     void create();
 
     void update();
-
-    void setLastFrameTime(double frametime)
-    {
-        last_frametime = frametime;
-    }
-
-    double getFrameTime()
-    {
-        return last_frametime;
-    }
 
     GLint getWindowWidth()
     {

@@ -9,13 +9,13 @@ std::shared_ptr<LuaCpp::Registry::LuaLibrary> Scene::scene_lua_lib = std::make_s
 
 // LUA CXX SCENE LIBRARY
 
-int CXX_scene_add_object(const char* object_name, const char* object_type)
+int CXX_scene_add_object(const char* object_name, const char* object_type, const char* object_path)
 {
     Object* obj;
 
     if (std::string(object_type)  == "sprite")
     {
-        obj = new Sprite(std::string(object_name), current_window->getScene());
+        obj = new Sprite(std::string(object_path), std::string(object_name), current_window->getScene());
         unsigned long int obj_id = current_window->getScene()->addSceneObject(obj);
         return obj_id;
     }
@@ -79,15 +79,16 @@ extern "C"
     {
         int args_num = lua_gettop(L);
 
-        if (args_num != 2)
+        if (args_num != 3)
         {
             return 0;
         }
 
         const char* obj_name = lua_tostring(L, 1);
         const char* obj_type = lua_tostring(L, 2);
+        const char* obj_path = lua_tostring(L, 3);
 
-        unsigned long int obj_id = CXX_scene_add_object(obj_name, obj_type);
+        unsigned long int obj_id = CXX_scene_add_object(obj_name, obj_type, obj_path);
         lua_pushnumber(L, static_cast<lua_Number>(obj_id));
 
         return 1;

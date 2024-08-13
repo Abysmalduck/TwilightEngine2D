@@ -10,7 +10,7 @@ private:
     Scene* _attached_scene;
     std::string name;
 public:
-    Object(std::string _name, Scene* attached_scene)
+    Object(const std::string& _name, Scene* attached_scene)
     {
         name = _name;
         _attached_scene = attached_scene;

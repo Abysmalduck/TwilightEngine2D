@@ -3,3 +3,9 @@
 
 build
 build/**
+
+win_build
+win_build/**
+
+dependecies/
+dependecies/**

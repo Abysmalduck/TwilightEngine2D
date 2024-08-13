@@ -19,10 +19,11 @@ Window::Window(GLint width, GLint height, std::string title)
 
 void Window::create()
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_GL_SetSwapInterval(0);
 
@@ -30,13 +31,16 @@ void Window::create()
     SDL_GLContext context = SDL_GL_CreateContext(this_window);
     this_context = &context;
 
-    SDL_GL_MakeCurrent(this_window, this_context);
-
     glewExperimental = GL_TRUE;
 
-    if(glewInit() != GLEW_OK)
+    GLenum status = glewInit();
+
+    if(status != GLEW_OK)
     {
+        const char* err_mesg = (char*)glewGetErrorString(status);
+
         logsi("Unable to initialize GLEW", ERR);
+        logsi(std::string(err_mesg), ERR);
         return;
     }
 
@@ -46,12 +50,14 @@ void Window::create()
     spriteRenderEngine->init();
     tileMapRenderEngine = new TileMapRenderer();
     tileMapRenderEngine->init();
+
+    logs("OpenGL initializied. OpenGL String:" + std::string((const char*)glGetString(GL_VERSION)));
 }
 
 void Window::update()
 {
     glViewport(0, 0, 800, 600);
-    glClearColor(0.5f, 0.25f, 0.25f, 0.f);
+    glClearColor(0.25f, 0.0f, 0.0f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     spriteRenderEngine->draw();

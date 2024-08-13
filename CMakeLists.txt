@@ -16,6 +16,7 @@ include_directories(
 
 if (UNIX)
     include_directories(/usr/local/include/LuaCpp/)
+    include_directories(/usr/local/include/SOIL/)
 endif (UNIX)
 
 set(SOURCES
@@ -31,28 +32,30 @@ set(SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 if (WIN32)
-    set(GLEW_INCLUDE_DIRS "C:/Program Files/GLEW/include/")
-    set(GLM_INCLUDE_DIRS "C:/Program Files/glm")
-    set(SDL2_INCLUDE_DIRS "C:/Program Files/SDL2/x86_64-w64-mingw32/include")
-    set(LUA_INCLUDE_DIRS "C:/lua-5.4.7")
-    set(LUACPP_INCLUDE_DIRS "C:/luacpp-bin/include")
+    set(GLEW_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/GLEW/include")
+    set(GLM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/glm/include")
+    set(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/SDL2/include")
+    set(LUA_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/lua/include")
+    set(LUACPP_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/luacpp/include")
+    set(SOIL_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/SOIL/include")
+
+    message(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
 
     include_directories(${GLEW_INCLUDE_DIRS}
                          ${GLM_INCLUDE_DIRS} 
                          ${SDL2_INCLUDE_DIRS} 
                          ${LUA_INCLUDE_DIRS}
-                         ${LUACPP_INCLUDE_DIRS})
+                         ${LUACPP_INCLUDE_DIRS}
+                         ${SOIL_INCLUDE_DIRS})
 
-    set(GLEW_LIBRARIES "C:/Program Files/GLEW/lib/Release/x64/glew32.lib")
-
-    set(LUA_LIBRARIES "C:/lua-5.4.7/bin/lua54.dll")
-    set(LUACPP_LIBRARIES "C:/luacpp-bin/libluacpp.dll")
-    set(SDL2_LIBRARIES "C:/Program Files/SDL2/x86_64-w64-mingw32/bin/SDL2.dll")
+    set(GLEW_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/GLEW/glew32.dll")
+    set(LUA_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/lua/lua54.dll")
+    set(LUACPP_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/luacpp/libluacpp.dll")
+    set(SDL2_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/SDL2/SDL2.dll")
+    set(SOIL_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/dependecies/SOIL/libsoil.dll")
 
     
 endif ()
-
-
 
 find_package(OpenGL REQUIRED OpenGL)
 if (UNIX)
@@ -60,11 +63,17 @@ if (UNIX)
     find_package(GLEW REQUIRED)
     find_package(glm REQUIRED)
 
-    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} OpenGL::GL lua luacpp)
+    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} OpenGL::GL lua luacpp soil)
 endif (UNIX)
 
 if (WIN32)
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} OpenGL::GL ${LUA_LIBRARIES} ${LUACPP_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} 
+                        ${SDL2_LIBRARIES} 
+                        ${GLEW_LIBRARIES} 
+                        OpenGL::GL 
+                        ${SOIL_LIBRARIES}
+                        ${LUA_LIBRARIES} 
+                        ${LUACPP_LIBRARIES})
 endif(WIN32)
 
 

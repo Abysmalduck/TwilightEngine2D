@@ -11,11 +11,17 @@ class Sprite;
 class Sprite : public Object
 {
 private:
-    
-public:
-    Sprite(std::string name, Scene* scene);
+    std::string texture_path = "../game/resources/textures/default.png";
+    unsigned char* texture_raw;
+    int width = 0;
+    int height = 0;
+    int channel = 0;
 
-    std::string texture_path;
+    GLuint texture_gl;
+public:
+    Sprite(const std::string& text_path, const std::string& name, Scene* scene);
+
+    GLuint getTexture() { return texture_gl;}
 
     void update() override
     {
